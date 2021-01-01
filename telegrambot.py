@@ -42,8 +42,7 @@ def incomingmess(message):
                     bot.send_message(message.chat.id, url)
                 exit()
         else:
-            url = 'Меня не впустили\n'
-				  'Это закрытый аккаунт ('
+            url = 'Меня не впустили\nЭто закрытый аккаунт ('
         print(url)
         bot.send_message(message.chat.id, url)
     elif message.text.find('https://instagram.com/') > -1:
