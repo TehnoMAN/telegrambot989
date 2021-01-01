@@ -1,0 +1,4 @@
+telebot
+os
+requests
+json
