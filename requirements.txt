@@ -1,4 +1,4 @@
-telebot
+pytelegrambotapi
 os
 requests
 json
