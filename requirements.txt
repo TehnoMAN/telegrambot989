@@ -1,4 +1,2 @@
-requests
-json
-os
-pytelegrambotapi
+pytelegrambotapi==3.7.4
+requests==2.24.0
