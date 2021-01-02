@@ -3,7 +3,7 @@ import os
 from requests import get
 import json
 
-head = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+head = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
 'Accept': '*/*'}
 
 bot = telebot.TeleBot(os.environ.get('bottok'))
@@ -16,13 +16,11 @@ def start(message):
 
 @bot.message_handler(content_types=['text'])
 def incomingmess(message):
-    print(message.text)
     if message.text.find('https://www.instagram.com/p/') > -1 or message.text.find('https://www.instagram.com/reel/') > -1:
         print('media')
         html = get(message.text, headers=head).text
         html = html[html.find('_sharedData = ') + 14:html.find(';</script>')]
         js = json.loads(html)
-        print(len(html))
         if js['entry_data'].get('PostPage', None):
             typ = js['entry_data']['PostPage'][0]['graphql']['shortcode_media']['__typename']
             if typ == 'GraphImage':
@@ -38,12 +36,10 @@ def incomingmess(message):
                         url = js['node']['display_url']
                     elif typ == 'GraphVideo':
                         url = js['node']['video_url']
-                    # url = js['node']['display_url']
                     bot.send_message(message.chat.id, url)
                 exit()
         else:
             url = 'Меня не впустили\nЭто закрытый аккаунт ('
-        print(url)
         bot.send_message(message.chat.id, url)
     elif message.text.find('https://instagram.com/') > -1:
         print('prof')
