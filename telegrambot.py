@@ -46,6 +46,7 @@ def incomingmess(message):
         html = get(message.text, headers=head).text
         html = html[html.find('_sharedData = ') + 14:html.find(';</script>')]
 		print(len(html))
+		print(html)
         js = json.loads(html)
         try:
             url = js['entry_data']['ProfilePage'][0]['graphql']['user']['profile_pic_url_hd']
