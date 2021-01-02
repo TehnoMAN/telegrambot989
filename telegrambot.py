@@ -46,7 +46,10 @@ def incomingmess(message):
         html = get(message.text, headers=head).text
         html = html[html.find('_sharedData = ') + 14:html.find(';</script>')]
         js = json.loads(html)
-        url = js['entry_data']['ProfilePage'][0]['graphql']['user']['profile_pic_url_hd']
+	try:
+            url = js['entry_data']['ProfilePage'][0]['graphql']['user']['profile_pic_url_hd']
+	except Exception:
+	    url = 'Непредвиденная ошибка ('
         bot.send_message(message.chat.id, url)
     else:
         bot.send_message(message.chat.id, 'Щас подумаю...')
