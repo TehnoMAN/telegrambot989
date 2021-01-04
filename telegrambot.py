@@ -57,7 +57,7 @@ def incomingmess(message):
     elif message.text.find('www.youtube.com/watch?v=') > -1 or message.text.find('https://youtu.be/') > -1:
         bot.send_message(message.chat.id, 'Щас подумаю...')
         l = []
-        proc = subprocess.Popen('youtube-dl.exe -g ' + message.text,
+        proc = subprocess.Popen('youtube-dl -g ' + message.text,
                                 shell=True, stdout=subprocess.PIPE)
         for line in proc.stdout:
             l.append(line.decode('cp866').strip())
