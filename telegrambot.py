@@ -1,8 +1,9 @@
-import telebot, types
+import telebot
 import os
 from requests import get
 import json
 import youtube_dl
+from datetime import timedelta
 
 head = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
         'Accept': '*/*'}
@@ -13,6 +14,7 @@ def start(message):
     bot.send_message(message.chat.id, 'Добро пожаловать.\n'
                                       'Это бот тырелка из Инстаграма 🤖\n'
                                       'Можешь присылать ссылки на картинки, видосы и профиль.\n'
+                                      'Так же есть закачка песен с ютуба\n'
                                       'А если напишешь любое английское слово, то я найду картинку по нему )')
 
 @bot.message_handler(content_types=['text'])
@@ -62,12 +64,15 @@ def incomingmess(message):
             for i in result['formats']:
                 if i['format_id'] == '140':
                     url = i['url']
-                    markup = types.InlineKeyboardMarkup()
-                    btn_my_site = types.InlineKeyboardButton(text='Скачать', url=url)
+                    markup = telebot.types.InlineKeyboardMarkup()
+                    btn_my_site = telebot.types.InlineKeyboardButton(text='Скачать', url=url)
                     markup.add(btn_my_site)
-                    bot.send_message(message.chat.id, result['title'], reply_markup=markup)
-                    #bot.send_message(message.chat.id, 'Вот твоя песня\nОткрой в браузере и скачай.\n' + url)
+                    bot.send_message(message.chat.id, f"{result['title']}\n"
+                                                      f"🕒 {str(timedelta(seconds=result['duration']))}"
+                                                      f"  👁 {result['view_count']}\n"
+                                                      f"{result['thumbnails'][-1]['url']}", reply_markup=markup)
     else:
+        #print(message.text)
         bot.send_message(message.chat.id, 'Щас подумаю...')
         t = get('https://source.unsplash.com/300x500/?' + message.text, headers=head).content
         #t = get('https://picsum.photos/300/500', headers=head).content
