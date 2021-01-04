@@ -45,7 +45,7 @@ def incomingmess(message):
         bot.send_message(message.chat.id, url)
     elif message.text.find('https://instagram.com/') > -1:
         print('prof')
-        html = get(message.text, headers=head, proxies=proxydict).text
+        html = get(message.text, headers=head).text
         html = html[html.find('_sharedData = ') + 14:html.find(';</script>')]
         print(len(html))
         print(html)
@@ -67,8 +67,8 @@ def incomingmess(message):
             result = ydl.extract_info(message.text, download=False)
             for i in result['formats']:
                 if i['format_id'] == '140':
-                url = i['url']
-                bot.send_message(message.chat.id, 'Вот твоя песня\nОткрой в браузере и скачай.\n' + url)
+                    url = i['url']
+                    bot.send_message(message.chat.id, 'Вот твоя песня\nОткрой в браузере и скачай.\n' + url)
     else:
         bot.send_message(message.chat.id, 'Щас подумаю...')
         t = get('https://source.unsplash.com/300x500/?' + message.text, headers=head).content
