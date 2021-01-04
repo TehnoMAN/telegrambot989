@@ -6,7 +6,7 @@ import json
 head = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
         'Accept': '*/*'}
 
-bot = telebot.TeleBot('1469496444:AAHOhHxskpNUgF6WeEen6XyNfwic1agmeN8')#os.environ.get('bottok'))
+bot = telebot.TeleBot(os.environ.get('bottok'))
 @bot.message_handler(commands=['start'])
 def start(message):
     bot.send_message(message.chat.id, 'Добро пожаловать.\n'
