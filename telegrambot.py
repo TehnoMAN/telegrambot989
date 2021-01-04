@@ -1,9 +1,8 @@
-import telebot
+import telebot, types
 import os
 from requests import get
 import json
 import youtube_dl
-#import subprocess
 
 head = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
         'Accept': '*/*'}
@@ -57,18 +56,17 @@ def incomingmess(message):
         bot.send_message(message.chat.id, url)
     elif message.text.find('www.youtube.com/watch?v=') > -1 or message.text.find('https://youtu.be/') > -1:
         bot.send_message(message.chat.id, 'Щас подумаю...')
-        # l = []
-        # proc = subprocess.Popen('youtube-dl.exe -g ' + message.text,
-        #                         shell=True, stdout=subprocess.PIPE)
-        # for line in proc.stdout:
-        #     l.append(line.decode('cp866').strip())
         ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s'})
         with ydl:
             result = ydl.extract_info(message.text, download=False)
             for i in result['formats']:
                 if i['format_id'] == '140':
                     url = i['url']
-                    bot.send_message(message.chat.id, 'Вот твоя песня\nОткрой в браузере и скачай.\n' + url)
+                    markup = types.InlineKeyboardMarkup()
+                    btn_my_site = types.InlineKeyboardButton(text='Скачать', url=url)
+                    markup.add(btn_my_site)
+                    bot.send_message(message.chat.id, result['title'], reply_markup=markup)
+                    #bot.send_message(message.chat.id, 'Вот твоя песня\nОткрой в браузере и скачай.\n' + url)
     else:
         bot.send_message(message.chat.id, 'Щас подумаю...')
         t = get('https://source.unsplash.com/300x500/?' + message.text, headers=head).content
