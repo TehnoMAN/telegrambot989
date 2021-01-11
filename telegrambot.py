@@ -58,19 +58,24 @@ def incomingmess(message):
         bot.send_message(message.chat.id, url)
     elif message.text.find('www.youtube.com/watch?v=') > -1 or message.text.find('https://youtu.be/') > -1:
         bot.send_message(message.chat.id, 'Щас подумаю...')
-        ydl = youtube_dl.YoutubeDL({'outtmpl': '%(id)s%(ext)s'})
+        ydl = youtube_dl.YoutubeDL({'format': '140'})#{'outtmpl': '%(id)s%(ext)s'})
         with ydl:
-            result = ydl.extract_info(message.text, download=False)
-            for i in result['formats']:
-                if i['format_id'] == '140':
-                    url = i['url']
-                    markup = telebot.types.InlineKeyboardMarkup()
-                    btn_my_site = telebot.types.InlineKeyboardButton(text='Скачать', url=url)
-                    markup.add(btn_my_site)
-                    bot.send_message(message.chat.id, f"{result['title']}\n"
-                                                      f"🕒 {str(timedelta(seconds=result['duration']))}"
-                                                      f"  👁 {result['view_count']}\n"
-                                                      f"{result['thumbnails'][-1]['url']}", reply_markup=markup)
+            result = ydl.extract_info(message.text, download=True)
+        vname = f"{result['title']}-{result['id']}.m4a"
+        vid = open(vname, 'rb')
+        bot.send_audio(message.chat.id, vid)
+        vid.close()
+        os.remove(vname)
+            # for i in result['formats']:
+            #     if i['format_id'] == '140':
+            #         url = i['url']
+            #         markup = telebot.types.InlineKeyboardMarkup()
+            #         btn_my_site = telebot.types.InlineKeyboardButton(text='Скачать', url=url)
+            #         markup.add(btn_my_site)
+            #         bot.send_message(message.chat.id, f"{result['title']}\n"
+            #                                           f"🕒 {str(timedelta(seconds=result['duration']))}"
+            #                                           f"  👁 {result['view_count']}\n"
+            #                                           f"{result['thumbnails'][-1]['url']}", reply_markup=markup)
     else:
         #print(message.text)
         bot.send_message(message.chat.id, 'Щас подумаю...')
