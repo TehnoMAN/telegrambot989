@@ -5,6 +5,7 @@ import json
 import youtube_dl
 from datetime import timedelta
 
+print('start')
 head = {'User-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
         'Accept': '*/*'}
 
@@ -16,6 +17,7 @@ def start(message):
                                       'Можешь присылать ссылки на картинки, видосы и профиль.\n'
                                       'Так же есть закачка песен с ютуба\n'
                                       'А если напишешь любое английское слово, то я найду картинку по нему )')
+
 
 @bot.message_handler(content_types=['text'])
 def incomingmess(message):
@@ -49,7 +51,7 @@ def incomingmess(message):
         html = get(message.text, headers=head).text
         html = html[html.find('_sharedData = ') + 14:html.find(';</script>')]
         print(len(html))
-        print(html)
+        #print(html)
         js = json.loads(html)
         try:
             url = js['entry_data']['ProfilePage'][0]['graphql']['user']['profile_pic_url_hd']
@@ -77,7 +79,7 @@ def incomingmess(message):
             #                                           f"  👁 {result['view_count']}\n"
             #                                           f"{result['thumbnails'][-1]['url']}", reply_markup=markup)
     else:
-        #print(message.text)
+        print(message.text)
         bot.send_message(message.chat.id, 'Щас подумаю...')
         t = get('https://source.unsplash.com/300x500/?' + message.text, headers=head).content
         #t = get('https://picsum.photos/300/500', headers=head).content
